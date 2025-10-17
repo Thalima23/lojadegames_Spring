@@ -43,6 +43,19 @@ import jakarta.validation.Valid;
                 .orElse(ResponseEntity.notFound().build());
     }
     
+    //Maior preço
+    @GetMapping("/maior-preco/{preco}")
+    public ResponseEntity<List<Produto>> getProdutosMaiorQue(@PathVariable Double preco){
+        return ResponseEntity.ok(produtoRepository.findByPrecoGreaterThanOrderByPrecoAsc(preco));
+    }
+    
+    //Menor preço
+    @GetMapping("/menor-preco/{preco}")
+    public ResponseEntity<List<Produto>> getProdutosMenorQue(@PathVariable Double preco){
+        return ResponseEntity.ok(produtoRepository.findByPrecoLessThanOrderByPrecoDesc(preco));
+    }
+    
+    
     @GetMapping("/nome/{nome}")
     public ResponseEntity<List<Produto>> getByNome(@PathVariable String nome) {
         return ResponseEntity.ok(produtoRepository.findAllByNomeContainingIgnoreCase(nome));
