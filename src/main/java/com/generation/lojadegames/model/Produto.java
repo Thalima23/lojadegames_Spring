@@ -37,6 +37,11 @@ public class Produto {
     
     @NotBlank(message = "O atributo plataforma é obrigatório!")
     private String plataforma; // Exemplo: "PC", "PlayStation", "Xbox", "Switch"
+    
+    @NotBlank(message = "O link da foto é obrigatório!")
+    @Size(max = 500, message = "O link da foto não pode ter mais de 500 caracteres.")
+    private String foto;
+   
 	
     // Relacionamento N:1 com a classe Postagem
     
@@ -92,6 +97,14 @@ public class Produto {
 
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
     
 
