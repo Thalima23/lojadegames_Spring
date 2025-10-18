@@ -1,130 +1,87 @@
-🕹️  ## Projeto Loja de Games - Backend com Spring Boot
+# 🎮 Loja de Games
 
-<br />
+## 🧩 1. Sobre o projeto
 
-<div align="center">
-    <img src="https://i.imgur.com/w8tTOuT.png" title="source: imgur.com" /> 
-</div>
+A **Loja de Games** é uma aplicação desenvolvida em **Spring Boot** que simula um e-commerce de jogos eletrônicos.  
+O sistema permite o **cadastro, atualização, listagem e exclusão de produtos e categorias**, além de consultas personalizadas por preço e nome.
 
-<br />
+Este projeto foi desenvolvido como parte do **Bootcamp Generation Brasil – Full Stack Java**, com foco em aplicar os conceitos de **CRUD, relacionamento entre entidades e boas práticas com Spring Framework**.
 
-<div align="center">
-  <img src="https://img.shields.io/github/languages/top/rafaelq80/aulas_java_t82?style=flat-square" />
-  <img src="https://img.shields.io/github/repo-size/rafaelq80/aulas_java_t82?style=flat-square" />
-  <img src="https://img.shields.io/github/languages/count/rafaelq80/aulas_java_t82?style=flat-square" />
-  <img src="https://img.shields.io/github/last-commit/rafaelq80/aulas_java_t82?style=flat-square" />
-  <img src="https://img.shields.io/github/issues/rafaelq80/aulas_java_t82?style=flat-square" />
-  <img src="https://img.shields.io/github/issues-pr/rafaelq80/aulas_java_t82?style=flat-square" />
-  <img src="https://img.shields.io/badge/status-construção-yellow" alt="Status: Em Construção">
+---
 
-</div>
+## ⚙️ 2. Funcionalidades
 
-<br />
+### 🕹️ Produto
+- Criar, listar, atualizar e deletar produtos  
+- Consultar produtos por nome  
+- Consultar produtos com **preço maior ou menor** que um valor definido (em ordem crescente ou decrescente)  
+- Cada produto pertence a uma categoria específica  
 
-🎯 1. Descrição
+### 🗂️ Categoria
+- Criar, listar, atualizar e deletar categorias  
+- Consultar categorias por nome  
+- Relacionamento **1:N** com produtos
 
-A Loja de Games é uma aplicação backend desenvolvida com Spring Boot que simula o funcionamento de uma loja virtual de jogos.
-O sistema permite o cadastro, atualização, listagem e exclusão de produtos (jogos) e categorias, aplicando os princípios do CRUD e do modelo RESTful.
+---
 
-Entre os principais recursos, destacam-se:
+## 🧱 3. Diagrama de Classes
 
-Cadastro de categorias de jogos (como Aventura, Terror, RPG etc.)
-
-Cadastro de produtos com nome, descrição, preço, plataforma e link da imagem
-
-Associação de cada produto a uma categoria
-
-Consultas personalizadas, como:
-
-Produtos com preço maior que X (em ordem crescente)
-
-Produtos com preço menor que X (em ordem decrescente)
-
-Persistência dos dados em um banco MySQL
-
-<br />
-
-⚙️ 2. Sobre a API
-
-A API segue a arquitetura MVC (Model - View - Controller) e expõe endpoints RESTful para os recursos Produto e Categoria.
-Ela permite que um cliente (como o Insomnia ou o Postman) realize operações CRUD de forma organizada e segura.
-
-🧩 Principais funcionalidades:
-
-Criar, listar, atualizar e deletar categorias
-
-Criar, listar, atualizar e deletar produtos
-
-Buscar produtos por nome, categoria, preço maior que X ou menor que X
-
-Exibir os produtos com seus dados completos, incluindo imagem e categoria associada
-
-<br />
-
-🧱 3. Diagrama de Classes
-
+```mermaid
 classDiagram
-class Categoria {
-  - id : Long
-  - nome : String
-  - descricao : String
-  - produto : List<Produto>
-}
+    class Categoria {
+        - id : Long
+        - nome : String
+        - descricao : String
+        - produto : List<Produto>
+    }
 
-class Produto {
-  - id : Long
-  - nome : String
-  - descricao : String
-  - preco : Double
-  - plataforma : String
-  - foto : String
-  - categoria : Categoria
-}
+    class Produto {
+        - id : Long
+        - nome : String
+        - descricao : String
+        - preco : Double
+        - plataforma : String
+        - foto : String
+        - categoria : Categoria
+    }
 
-Categoria "1" --> "0..*" Produto : contém
-<br />
+    Categoria "1" --> "0..*" Produto : contém
+    
+    
+    💾 4. Estrutura do Banco de Dados
 
-🧰 5. Tecnologias utilizadas
-Item	Descrição
-Servidor	Tomcat (Spring Boot)
-Linguagem	Java 17
-Framework	Spring Boot
-ORM	JPA / Hibernate
-Banco de dados	MySQL
-Documentação	SpringDoc / Swagger
-Ferramentas de teste	Insomnia / Postman
-IDE recomendada	Spring Tool Suite (STS)
-<br />
+Tabela: tb_categorias
 
-🚀 6. Como Executar o Projeto
-6.1. Requisitos
+id
 
-Java JDK 17+
+nome
 
-MySQL
+descricao
 
-Spring Tool Suite (STS)
+Tabela: tb_produtos
 
-Insomnia
+id
 
-<br />
-6.2. Passos para executar
+nome
 
-Clone o repositório: git clone https://github.com/Thalima23/lojadegames_Spring
+descricao
 
-Abra o projeto no STS
+preco
 
-Configure seu banco de dados MySQL no arquivo application.properties
+plataforma
 
-Execute a aplicação
+foto
 
-Acesse os endpoints através do Insomnia ou Swagger
+categoria_id (chave estrangeira)
 
-Swagger: http://localhost:8080/swagger-ui/index.html
-
-<br />
-
-👩‍💻 9. Desenvolvido por
-
-Projeto desenvolvido pela **Thalita** (https://github.com/thalima23), como parte do bootcamp Generation Brasil – Full Stack Java 83. Para dúvidas, sugestões ou colaborações, entre em contato via GitHub ou abra uma issue!
+| Item                   | Descrição               |
+| ---------------------- | ----------------------- |
+| ☕ **Linguagem**        | Java 17                 |
+| 🌱 **Framework**       | Spring Boot             |
+| 🧩 **ORM**             | JPA / Hibernate         |
+| 🗄️ **Banco de Dados** | MySQL                   |
+| 🧾 **Documentação**    | SpringDoc / Swagger     |
+| 🧪 **Testes de API**   | Insomnia / Postman      |
+| 💻 **IDE**             | Spring Tool Suite (STS) |
+| 🚀 **Servidor**        | Tomcat (Spring Boot)    |
 
