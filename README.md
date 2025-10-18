@@ -109,7 +109,7 @@ MySQL
 Spring Tool Suite (STS)
 Insomnia ou Postman
 
-# 6.2. Passos para execução
+## 6.2. Passos para execução
 
 1. Clone o repositório
 
