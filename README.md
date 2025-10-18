@@ -26,6 +26,8 @@ Este projeto foi desenvolvido como parte do **Bootcamp Generation Brasil – Ful
 
 ## 🧱 3. Diagrama de Classes
 
+O diagrama abaixo representa a estrutura das classes e o relacionamento entre elas:
+
 ```mermaid
 classDiagram
     class Categoria {
@@ -46,7 +48,7 @@ classDiagram
     }
 
     Categoria "1" --> "0..*" Produto : contém
-    
+
     💾 4. Estrutura do Banco de Dados
 
 Tabela: tb_categorias
