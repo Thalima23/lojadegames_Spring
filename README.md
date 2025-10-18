@@ -48,8 +48,9 @@ classDiagram
     }
 
     Categoria "1" --> "0..*" Produto : contém
+```
 
-    💾 4. Estrutura do Banco de Dados
+## 💾 4. Estrutura do Banco de Dados
 
 Tabela: tb_categorias
 
@@ -86,3 +87,44 @@ categoria_id (chave estrangeira)
 | 💻 **IDE**             | Spring Tool Suite (STS) |
 | 🚀 **Servidor**        | Tomcat (Spring Boot)    |
 
+## 🧰 5. Tecnologias utilizadas
+
+| Item                   | Descrição               |
+| ---------------------- | ----------------------- |
+| ☕ **Linguagem**        | Java 17                 |
+| 🌱 **Framework**       | Spring Boot             |
+| 🧩 **ORM**             | JPA / Hibernate         |
+| 🗄️ **Banco de Dados** | MySQL                   |
+| 🧾 **Documentação**    | SpringDoc / Swagger     |
+| 🧪 **Testes de API**   | Insomnia / Postman      |
+| 💻 **IDE**             | Spring Tool Suite (STS) |
+| 🚀 **Servidor**        | Tomcat (Spring Boot)    |
+
+## 🚀 6. Como Executar o Projeto
+
+## 6.1. Requisitos:
+
+Java JDK 17+
+MySQL
+Spring Tool Suite (STS)
+Insomnia ou Postman
+
+# 6.2. Passos para execução
+
+1. Clone o repositório
+
+git clone https://github.com/thalima23/lojadegames_Spring
+
+
+2. Abra o projeto no Spring Tool Suite (STS)
+
+3. Configure seu banco de dados no arquivo application.properties
+
+4. Execute a aplicação (Run as > Spring Boot App)
+
+## 👩‍💻 7. Desenvolvido por
+
+Desenvolvido por [**Thalita**](https://github.com/rafaelq80) 💜
+Como parte do Bootcamp Generation Brasil – Full Stack Java 83.
+
+📫 Para dúvidas, sugestões ou colaborações, entre em contato via GitHub ou abra uma issue! 🚀
