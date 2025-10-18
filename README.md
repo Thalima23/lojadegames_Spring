@@ -76,17 +76,6 @@ foto
 
 categoria_id (chave estrangeira)
 
-| Item                   | Descrição               |
-| ---------------------- | ----------------------- |
-| ☕ **Linguagem**        | Java 17                 |
-| 🌱 **Framework**       | Spring Boot             |
-| 🧩 **ORM**             | JPA / Hibernate         |
-| 🗄️ **Banco de Dados** | MySQL                   |
-| 🧾 **Documentação**    | SpringDoc / Swagger     |
-| 🧪 **Testes de API**   | Insomnia / Postman      |
-| 💻 **IDE**             | Spring Tool Suite (STS) |
-| 🚀 **Servidor**        | Tomcat (Spring Boot)    |
-
 ## 🧰 5. Tecnologias utilizadas
 
 | Item                   | Descrição               |
