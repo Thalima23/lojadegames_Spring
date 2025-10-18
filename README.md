@@ -52,7 +52,7 @@ classDiagram
 
 ## 💾 4. Estrutura do Banco de Dados
 
-Tabela: tb_categorias
+### Tabela: tb_categorias
 
 id
 
@@ -60,7 +60,7 @@ nome
 
 descricao
 
-Tabela: tb_produtos
+### Tabela: tb_produtos
 
 id
 
