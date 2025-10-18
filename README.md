@@ -47,7 +47,6 @@ classDiagram
 
     Categoria "1" --> "0..*" Produto : contém
     
-    
     💾 4. Estrutura do Banco de Dados
 
 Tabela: tb_categorias
