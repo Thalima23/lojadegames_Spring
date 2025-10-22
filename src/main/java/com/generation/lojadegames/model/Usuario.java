@@ -1,21 +1,18 @@
 package com.generation.lojadegames.model;
 
-	import java.util.List;
-
-	import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-	import com.generation.blogpessoal.model.Postagem;
-
-	import jakarta.persistence.CascadeType;
+	import java.time.LocalDate;
+	import com.fasterxml.jackson.annotation.JsonFormat;
+	import com.generation.lojadegames.model.Usuario;
+	import jakarta.persistence.Column;
 	import jakarta.persistence.Entity;
-	import jakarta.persistence.FetchType;
 	import jakarta.persistence.GeneratedValue;
 	import jakarta.persistence.GenerationType;
 	import jakarta.persistence.Id;
-	import jakarta.persistence.OneToMany;
 	import jakarta.persistence.Table;
 	import jakarta.validation.constraints.Email;
 	import jakarta.validation.constraints.NotBlank;
-	import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 	@Entity
 	@Table(name = "tb_usuarios")
@@ -39,9 +36,11 @@ package com.generation.lojadegames.model;
 		@Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caracteres")
 		private String foto;
 
-		@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.REMOVE)
-		@JsonIgnoreProperties(value = "usuario", allowSetters = true)
-		private List<Postagem> postagem;
+		@NotNull(message = "A data de nascimento é obrigatória!")
+		@Column(name = "data_nascimento")
+		@JsonFormat(pattern = "yyy-MM-dd")
+		private LocalDate dataNascimento;
+		
 
 		public Long getId() {
 			return this.id;
@@ -83,13 +82,12 @@ package com.generation.lojadegames.model;
 			this.foto = foto;
 		}
 
-		public List<Postagem> getPostagem() {
-			return this.postagem;
+		public LocalDate getDataNascimento() {
+			return dataNascimento;
 		}
 
-		public void setPostagem(List<Postagem> postagem) {
-			this.postagem = postagem;
-			
+		public void setDataNascimento(LocalDate dataNascimento) {
+			this.dataNascimento = dataNascimento;
 		}
 		
 		

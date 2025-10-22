@@ -1,95 +1,118 @@
 package com.generation.lojadegames.service;
 
-	import java.util.List;
-	import java.util.Optional;
+import java.time.LocalDate;
+import java.time.Period; // Import novo
+import java.util.List;
+import java.util.Optional;
 
-	import org.springframework.beans.factory.annotation.Autowired;
-	import org.springframework.http.HttpStatus;
-	import org.springframework.security.authentication.AuthenticationManager;
-	import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-	import org.springframework.security.crypto.password.PasswordEncoder;
-	import org.springframework.stereotype.Service;
-	import org.springframework.web.server.ResponseStatusException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-	import com.generation.blogpessoal.model.Usuario;
-	import com.generation.blogpessoal.model.UsuarioLogin;
-	import com.generation.blogpessoal.repository.UsuarioRepository;
-	import com.generation.blogpessoal.security.JwtService;
+import com.generation.lojadegames.model.Usuario;
+import com.generation.lojadegames.model.UsuarioLogin;
+import com.generation.lojadegames.repository.UsuarioRepository;
+import com.generation.lojadegames.security.JwtService;
 
-	@Service
-	public class UsuarioService {
+@Service
+public class UsuarioService {
 
-		@Autowired
-		private UsuarioRepository usuarioRepository;
-		
-		@Autowired
-		private JwtService jwtService;
-		
-		@Autowired
-		private AuthenticationManager authenticationManager;
-		
-		@Autowired
-		private PasswordEncoder passwordEncoder;
-		
-		public List<Usuario> getAll() {
-			return usuarioRepository.findAll();
-		}
-		
-		public Optional<Usuario> getById(Long id) {
-			return usuarioRepository.findById(id);
-		}
-		
-		public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
-			if(usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
-				return Optional.empty();
-			
-			usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-			usuario.setId(null);
-			
-			return Optional.of(usuarioRepository.save(usuario));
-		}
-		
-		public Optional<Usuario> atualizarUsuario(Usuario usuario) {
-			if(!usuarioRepository.findById(usuario.getId()).isPresent())
-				return Optional.empty();
-			
-			Optional<Usuario> usuarioExistente = usuarioRepository.findByUsuario(usuario.getUsuario());
-			if(usuarioExistente.isPresent() && !usuarioExistente.get().getId().equals(usuario.getId()))
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe.", null);
-			
-			usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
-			
-			return Optional.of(usuarioRepository.save(usuario));
-		}
-		
-		public Optional<UsuarioLogin> autenticarUsuario(Optional<UsuarioLogin> usuarioLogin) {
-			if(!usuarioLogin.isPresent())
-				return Optional.empty();
-			
-			UsuarioLogin login = usuarioLogin.get();
-			
-			try {
-				authenticationManager.authenticate(
-						new UsernamePasswordAuthenticationToken(login.getUsuario(), login.getSenha()));
-				return usuarioRepository.findByUsuario(login.getUsuario())
-						.map(usuario -> construirRespostaLogin(login, usuario));
-				
-			} catch(Exception e) {
-				return Optional.empty();
-			}
-		}
-		
-		private UsuarioLogin construirRespostaLogin(UsuarioLogin usuarioLogin, Usuario usuario) {
-			usuarioLogin.setId(usuario.getId());
-			usuarioLogin.setNome(usuario.getNome());
-			usuarioLogin.setFoto(usuario.getFoto());
-			usuarioLogin.setSenha("");
-			usuarioLogin.setToken(gerarToken(usuario.getUsuario()));
-			return usuarioLogin;
-		}
-		
-		private String gerarToken(String usuario) {
-			return "Bearer " + jwtService.generateToken(usuario);
-		}
-	}
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    private JwtService jwtService;
+    
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
+    public List<Usuario> getAll() {
+        return usuarioRepository.findAll();
+    }
+    
+    public Optional<Usuario> getById(Long id) {
+        return usuarioRepository.findById(id);
+    }
+    
+    public Optional<Usuario> cadastrarUsuario(Usuario usuario) {
+        if (usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent())
+            return Optional.empty();
 
+        // ✅ NOVO TRECHO — verifica se tem data de nascimento e se é maior de 18
+        if (usuario.getDataNascimento() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A data de nascimento é obrigatória.");
+        }
+
+        if (!isMaiorDeIdade(usuario.getDataNascimento())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+                "O usuário deve ter pelo menos 18 anos para se cadastrar.");
+        }
+        // ✅ FIM DO NOVO TRECHO
+
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        usuario.setId(null);
+        
+        return Optional.of(usuarioRepository.save(usuario));
+    }
+    
+    public Optional<Usuario> atualizarUsuario(Usuario usuario) {
+        if (!usuarioRepository.findById(usuario.getId()).isPresent())
+            return Optional.empty();
+        
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByUsuario(usuario.getUsuario());
+        if (usuarioExistente.isPresent() && !usuarioExistente.get().getId().equals(usuario.getId()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário já existe.", null);
+
+        // Também pode validar idade ao atualizar, se quiser:
+        if (usuario.getDataNascimento() != null && !isMaiorDeIdade(usuario.getDataNascimento())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, 
+                "O usuário deve ter pelo menos 18 anos.");
+        }
+
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        
+        return Optional.of(usuarioRepository.save(usuario));
+    }
+    
+    public Optional<UsuarioLogin> autenticarUsuario(Optional<UsuarioLogin> usuarioLogin) {
+        if (!usuarioLogin.isPresent())
+            return Optional.empty();
+        
+        UsuarioLogin login = usuarioLogin.get();
+        
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(login.getUsuario(), login.getSenha()));
+            return usuarioRepository.findByUsuario(login.getUsuario())
+                    .map(usuario -> construirRespostaLogin(login, usuario));
+            
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+    
+    private UsuarioLogin construirRespostaLogin(UsuarioLogin usuarioLogin, Usuario usuario) {
+        usuarioLogin.setId(usuario.getId());
+        usuarioLogin.setNome(usuario.getNome());
+        usuarioLogin.setFoto(usuario.getFoto());
+        usuarioLogin.setSenha("");
+        usuarioLogin.setToken(gerarToken(usuario.getUsuario()));
+        return usuarioLogin;
+    }
+    
+    private String gerarToken(String usuario) {
+        return "Bearer " + jwtService.generateToken(usuario);
+    }
+
+    // ✅ NOVO MÉTODO: verificação de idade mínima
+    private boolean isMaiorDeIdade(LocalDate dataNascimento) {
+        return Period.between(dataNascimento, LocalDate.now()).getYears() >= 18;
+    }
+}
